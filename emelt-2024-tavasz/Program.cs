@@ -12,6 +12,8 @@ internal class Program
         program.Feladat3();
         program.Feladat4();
         program.Feladat5();
+        program.Feladat6();
+        program.Feladat7();
     }
 
     readonly List<Signal> data = [];
@@ -28,9 +30,9 @@ internal class Program
         Console.WriteLine("\n1. feladat");
 
         var lines = File.ReadAllLines(PathToInput);
-        foreach (var cLine in lines)
+        foreach (var line in lines)
         {
-            var cLineSplit = cLine.Split(' ');
+            var cLineSplit = line.Split(' ');
 
             data.Add(new Signal(
                 cLineSplit[0],
@@ -49,30 +51,23 @@ internal class Program
     {
         Console.WriteLine("\n2. feladat");
 
-        TimeOnly? firstEntryTime = null;
-        TimeOnly? lastExitTime = null;
-
-        // Assuming data is ordered by time, ascending
-        foreach (var cSignal in data)
+        // Reverse-order search
+        TimeOnly firstEntryTime = TimeOnly.MaxValue;
+        TimeOnly lastExitTime = TimeOnly.MinValue;
+        foreach (var signal in data)
         {
-            if (cSignal.Action == SignalType.Enter)
+            if (signal.Type == SignalType.Enter &&
+                signal.Time < firstEntryTime)
             {
-                firstEntryTime = cSignal.Time;
-                break;
+                firstEntryTime = signal.Time;
+            }
+
+            if (signal.Type == SignalType.Exit &&
+                signal.Time > lastExitTime)
+            {
+                lastExitTime = signal.Time;
             }
         }
-
-        data.Reverse();
-        // Assuming now, data is ordered by time, descending
-        foreach (var cSignal in data)
-        {
-            if (cSignal.Action == SignalType.Exit)
-            {
-                lastExitTime = cSignal.Time;
-                break;
-            }
-        }
-        data.Reverse(); // Two reverses to not disturb data
 
         Console.WriteLine($"Az első tanuló {firstEntryTime}-kor lépett be a főkapun.");
         Console.WriteLine($"Az utolsó tanuló {lastExitTime}-kor lépett ki a főkapun.");
@@ -86,13 +81,13 @@ internal class Program
         Console.WriteLine("\n3. feladat");
 
         var sb = new StringBuilder();
-        foreach (var cSignal in data)
+        foreach (var signal in data)
         {
-            if (cSignal.Action == SignalType.Enter &&
-                cSignal.Time.CompareTo(new TimeOnly(7, 50)) >= 0 &&
-                cSignal.Time.CompareTo(new TimeOnly(8, 15)) <= 0)
+            if (signal.Type == SignalType.Enter &&
+                signal.Time > new TimeOnly(7, 50) &&
+                signal.Time <= new TimeOnly(8, 15))
             {
-                sb.Append($"{cSignal.Time} {cSignal.StudentId}\n");
+                sb.Append($"{signal.Time} {signal.StudentId}\n");
             }
         }
 
@@ -107,9 +102,9 @@ internal class Program
     {
         Console.WriteLine("\n4. feladat");
 
-        foreach (var cSignal in data)
+        foreach (var signal in data)
         {
-            if (cSignal.Action == SignalType.Eat)
+            if (signal.Type == SignalType.Eat)
             {
                 eatCounter++;
             }
@@ -126,11 +121,11 @@ internal class Program
         Console.WriteLine("\n5. feladat");
 
         HashSet<string> readers = [];
-        foreach (var cSignal in data)
+        foreach (var signal in data)
         {
-            if (cSignal.Action == SignalType.BorrowBook)
+            if (signal.Type == SignalType.BorrowBook)
             {
-                readers.Add(cSignal.StudentId);
+                readers.Add(signal.StudentId);
             }
         }
 
@@ -143,5 +138,95 @@ internal class Program
         {
             Console.WriteLine("Nem voltak többen, mint a menzán.");
         }
+    }
+
+    /// <summary>
+    /// A portás reggel elfelejtette a hátsó kaput bezárni, ezért a 10:45-kor kezdődő szünetben néhány tanuló kiment a hátsó kijáraton át a szemközti pékségbe tízórait venni. A portás csak 10:50-kor zárta be a hátsó kaput, így 10:50 után a korábban a hátsó kapun át távozott tanulóknak a főbejáraton át kellett visszajönniük. Írassa ki a képernyőre egy-egy szóközzel elválasztva ezeknek a tanulóknak az azonosítóját! (A szünet 11:00-ig tartott, és feltételezheti, hogy azt megelőzően valamennyi érintett tanuló visszaért.) Vegye figyelembe, hogy a tanulók egy része aznap csak 11:00-ra jött iskolába, illetve szabályosan lépett ki!
+    /// </summary>
+    void Feladat6()
+    {
+        Console.WriteLine("\n6. feladat");
+        // Azokat a tanulókat keressük, akik: 
+        // 1. 10:50 és 11:00 között beléptek
+        // 2. ÉS 10:45 előtt már egyszer beléptek (tehát nem 10:50 és 11:00 között van az első belépésük)
+        // 3. DE NEM léptek ki HIVATALOSAN 10:45 és 11:00 között
+
+        // a condition3-ba azokat rakjuk, akik hivatalosan kiléptek 10:45 és 11:00, majd kivonjuk a condition1 és condition2 metszetéből
+        HashSet<string> condition1 = [];
+        HashSet<string> condition2 = [];
+        HashSet<string> condition3 = [];
+
+        foreach (var signal in data)
+        {
+            // fill up condition1
+            if (signal.Type == SignalType.Enter &&
+                signal.Time >= new TimeOnly(10, 50) &&
+                signal.Time < new TimeOnly(11, 0))
+            {
+                condition1.Add(signal.StudentId);
+            }
+
+            // fill up condition2
+            if (signal.Type == SignalType.Enter &&
+                signal.Time < new TimeOnly(10, 45))
+            {
+                condition2.Add(signal.StudentId);
+            }
+
+            // fill up condition3
+            if (signal.Type == SignalType.Exit &&
+                signal.Time >= new TimeOnly(10, 45) &&
+                signal.Time < new TimeOnly(11, 0))
+            {
+                condition3.Add(signal.StudentId);
+            }
+        }
+
+        List<string> result = [.. condition1.Intersect(condition2).Except(condition3)];
+        result.Sort();
+
+        Console.WriteLine($"Az érintett tanulók: {string.Join(' ', result)}");
+    }
+
+    /// <summary>
+    /// Kérje be egy tanuló azonosítóját, és írassa ki a minta szerinti formátumban, hogy mennyi idő telt el az iskolába való első belépése és utolsó távozása között! Feltételezheti, hogy 19:00-ig minden tanuló elhagyta az iskolát. Ha aznap az adott azonosítójú tanuló nem járt az iskolában, akkor írassa ki az <c>Ilyen azonosítójú tanuló aznap nem volt az iskolában.</c> üzenetet!
+    /// </summary>
+    void Feladat7()
+    {
+        Console.WriteLine("\n7. feladat");
+
+        Console.Write("Adja meg egy tanuló azonosítóját: ");
+        var input = Console.ReadLine().Trim().ToUpper();
+
+        // Reverse-order search
+        TimeOnly firstEntryTime = TimeOnly.MaxValue;
+        TimeOnly lastExitTime = TimeOnly.MinValue;
+        foreach (var signal in data)
+        {
+            if (Equals(signal.StudentId, input) &&
+                signal.Type == SignalType.Enter &&
+                signal.Time < firstEntryTime)
+            {
+                firstEntryTime = signal.Time;
+            }
+
+            if (Equals(signal.StudentId, input) &&
+                signal.Type == SignalType.Exit &&
+                signal.Time > lastExitTime)
+            {
+                lastExitTime = signal.Time;
+            }
+        }
+
+        if (Equals(firstEntryTime, TimeOnly.MaxValue) ||
+            Equals(lastExitTime, TimeOnly.MinValue))
+        {
+            Console.WriteLine("Ilyen azonosítójú tanuló aznap nem volt az iskolában.");
+            return;
+        }
+
+        var elapsedTime = lastExitTime - firstEntryTime;
+
+        Console.WriteLine($"A tanuló érekezése és távozása között {elapsedTime.Hours} óra és {elapsedTime.Minutes} perc telt el.");
     }
 }
