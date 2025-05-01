@@ -1,4 +1,6 @@
-﻿internal class Program
+﻿using System.Text;
+
+internal class Program
 {
 
     static void Main(string[] args)
@@ -8,11 +10,15 @@
         program.Feladat1();
         program.Feladat2();
         program.Feladat3();
+        program.Feladat4();
+        program.Feladat5();
     }
 
     readonly List<Signal> data = [];
+    int eatCounter = 0;
 
     const string PathToInput = "C:\\Prog\\erettsegi-megoldasok-dotnet\\emelt-2024-tavasz\\bedat.txt";
+    const string PathToOutput = "C:\\Prog\\erettsegi-megoldasok-dotnet\\emelt-2024-tavasz\\kesok.txt";
 
     /// <summary>
     /// Olvassa be a <c>bedat.txt</c> állomány tartalmát, tárolja el az abban szereplő adatokat, és annak felhasználásával oldja meg a következő feladatokat! Feltételezheti, hogy az állomány legfeljebb 2000 adatsort tartalmaz.
@@ -78,5 +84,64 @@
     void Feladat3()
     {
         Console.WriteLine("\n3. feladat");
+
+        var sb = new StringBuilder();
+        foreach (var cSignal in data)
+        {
+            if (cSignal.Action == SignalType.Enter &&
+                cSignal.Time.CompareTo(new TimeOnly(7, 50)) >= 0 &&
+                cSignal.Time.CompareTo(new TimeOnly(8, 15)) <= 0)
+            {
+                sb.Append($"{cSignal.Time} {cSignal.StudentId}\n");
+            }
+        }
+
+        File.WriteAllText(PathToOutput, sb.ToString());
+        Console.WriteLine("Sikeresen kiírva.");
+    }
+
+    /// <summary>
+    /// Határozza meg, hány tanuló ebédelt aznap a menzán! Írassa ki az eredményt a képernyőre a mintának megfelelően!
+    /// </summary>
+    void Feladat4()
+    {
+        Console.WriteLine("\n4. feladat");
+
+        foreach (var cSignal in data)
+        {
+            if (cSignal.Action == SignalType.Eat)
+            {
+                eatCounter++;
+            }
+        }
+
+        Console.WriteLine($"A menzán aznap {eatCounter} tanuló ebédelt.");
+    }
+
+    /// <summary>
+    /// Szeretnénk tudni, hogy a könyvtári kölcsönzés vagy a menza a népszerűbb-e ezen a napon. <list type="number"> <item> Határozza meg, hány tanuló kölcsönzött aznap a könyvtárban! Ha egy tanuló többször is kölcsönzött, akkor azt csak egyszer vegye figyelembe! Írassa ki az eredményt a képernyőre a mintának megfelelően! </item> <item> A könyvtárosok szerint több tanuló kölcsönöz egy nap a könyvtárban, mint ahányan a menzán ebédelnek. Így volt-e ez ezen a napon is? A választ („Többen voltak, mint a menzán.” vagy „Nem voltak többen, mint a menzán.”) a mintának megfelelő formában írassa ki a képernyőre! </item> </list>
+    /// </summary>
+    void Feladat5()
+    {
+        Console.WriteLine("\n5. feladat");
+
+        HashSet<string> readers = [];
+        foreach (var cSignal in data)
+        {
+            if (cSignal.Action == SignalType.BorrowBook)
+            {
+                readers.Add(cSignal.StudentId);
+            }
+        }
+
+        Console.WriteLine($"Aznap {readers.Count} tanuló kölcsönzött a könyvtárban.");
+        if (readers.Count > eatCounter)
+        {
+            Console.WriteLine("Többen voltak, mint a menzán.");
+        }
+        else
+        {
+            Console.WriteLine("Nem voltak többen, mint a menzán.");
+        }
     }
 }
