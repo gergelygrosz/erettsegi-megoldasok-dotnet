@@ -52,22 +52,14 @@
             Console.WriteLine("\n3. feladat");
 
             Console.Write("Adja meg az egyik nap számát: ");
-            var input = Console.ReadLine();
-            if (!int.TryParse(input, out int inputInt) || inputInt < 0 || inputInt > 30) // ne engedjük meg, hogy nem létező napra kérdezzenek rá!
+            var rawInput = Console.ReadLine();
+            if (!int.TryParse(rawInput, out int inputDay) || inputDay < 0 || inputDay > 30) // ne engedjük meg, hogy nem létező napra kérdezzenek rá!
             {
                 Console.WriteLine("Helytelen napot adott meg.");
                 return;
             }
 
-            var count = 0;
-            foreach (var order in data)
-            {
-                if (order.Day == inputInt)
-                {
-                    count++;
-                }
-            }
-
+            var count = data.Count(x => x.Day == inputDay);
             Console.WriteLine($"A megadott napon {count} rendelés történt.");
         }
 
