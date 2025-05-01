@@ -52,3 +52,8 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# Output-fájlok a feladatsorokból
+
+emelt-2024-osz/ido.txt
+emelt-2024-tavasz/kesok.txt
