@@ -15,9 +15,10 @@
         Feladat3();
         Feladat4();
         Feladat5();
-        /*
-        Feladat6();
+        Console.WriteLine("\n6. feladat");
+        Console.WriteLine($"osszes(City.PL, 7) = {osszes(City.PL, 7)}");
         Feladat7();
+        /*
         Feladat8();
         */
 
@@ -78,13 +79,35 @@
                 }
             }
 
-            Console.WriteLine($"{wereThereOrders.Count(x => x == false)} napon nem volt rendelés a reklámban nem érintett városból.");
+            Console.WriteLine($"{wereThereOrders.Count(orderOnDay => orderOnDay == false)} napon nem volt rendelés a reklámban nem érintett városból.");
         }
 
-        ///
+        /// Állapítsa meg, hogy mennyi volt az egy rendelésben szereplő legnagyobb darabszám, és melyik volt az a nap, amikor az első ilyen számú rendelést leadták! Az eredményt a lenti minta szerint írja ki!
         void Feladat5()
         {
             Console.WriteLine("\n5. feladat");
+
+            var maxAmount = data.Max(order => order.Amount);
+            var firstDay = data.First(order => order.Amount == maxAmount).Day;
+            Console.WriteLine($"A legnagyobb rendelt mennyiség {maxAmount}, az első ilyen mértékű rendelés napja {firstDay}.");
+        }
+
+        /// Készítsen függvényt osszes néven, amely megadja, hogy mennyi volt egy adott városból egy adott napon a rendelt termékek száma! A függvény bemenete a három város egyikére utaló kétbetűs szöveg és a nap sorszáma legyen. Amennyiben szükséges, akkor további paramétert is felvehet a rendelések adatainak elérése érdekében. A függvény visszaadott értéke a rendelt darabszámok összege legyen! A függvényt például a következő módon lehessen meghívni: osszes("PL", 7). A függvényt a későbbiekben felhasználhatja a további feladatok megoldásakor.
+        int osszes(City city, int day)
+        {
+            return data.Sum(order => (order.City == city && order.Day == day) ? order.Amount : 0);
+        }
+
+        /// Számítsa ki, hogy a kampány utáni első napon, azaz a 21-edik napon melyik városból mennyit rendeltek a termékből!Az eredményt a lenti mintának megfelelő formában írja ki!
+        void Feladat7()
+        {
+            Console.WriteLine("\n7. feladat");
+
+            int ordersFromTV = osszes(City.TV, 21);
+            int ordersFromPL = osszes(City.PL, 21);
+            int ordersFromNR = osszes(City.NR, 21);
+
+            Console.WriteLine($"A rendelt termékek darabszáma a 21. napon: TV: {ordersFromTV}, PL: {ordersFromPL}, NR: {ordersFromNR}.");
         }
     }
 }
