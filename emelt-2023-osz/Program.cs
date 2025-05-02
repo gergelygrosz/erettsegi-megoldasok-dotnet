@@ -1,11 +1,12 @@
-﻿internal class Program
+﻿using System.Text;
+
+internal class Program
 {
     const string PATH_TO_INPUT = @"C:\Prog\erettsegi-megoldasok-dotnet\emelt-2023-osz\rendel.txt";
     const string PATH_TO_OUTPUT = @"C:\Prog\erettsegi-megoldasok-dotnet\emelt-2023-osz\kampany.txt";
 
     static void Main(string[] args)
     {
-
         List<Order> data = [];
 
         Console.WriteLine("--- 2023. ŐSZ - DIGITÁLIS KULTÚRA EMELT - REKLÁM ---");
@@ -18,9 +19,7 @@
         Console.WriteLine("\n6. feladat");
         Console.WriteLine($"osszes(City.PL, 7) = {osszes(City.PL, 7)}");
         Feladat7();
-        /*
         Feladat8();
-        */
 
         /// Olvassa be és tárolja el a további feldolgozáshoz a <c>rendel.txt</c> állomány tartalmát!
         void Feladat1()
@@ -108,6 +107,47 @@
             int ordersFromNR = osszes(City.NR, 21);
 
             Console.WriteLine($"A rendelt termékek darabszáma a 21. napon: TV: {ordersFromTV}, PL: {ordersFromPL}, NR: {ordersFromNR}.");
+        }
+
+        /// Összesítse városonként, hogy hány rendelés érkezett az első 10, a 11-20-adik valamint a záró 10 napon! Az eredményt (a fejlécet is beleértve) táblázatos formában, tabulátorokkal tagoltan jelenítse meg a képernyőn, illetve írja azonos formátumban a kampany.txt szöveges állományba!
+        void Feladat8()
+        {
+            Console.WriteLine("\n8. feladat");
+
+            var table = new int[3, 3];
+
+            foreach (var order in data)
+            {
+                var insertPosition = 0;
+                if (order.Day >= 1 && order.Day <= 10)
+                {
+                    insertPosition = 0;
+                }
+                else if (order.Day >= 11 && order.Day <= 20)
+                {
+                    insertPosition = 1;
+                }
+                else if (order.Day >= 21 && order.Day <= 30)
+                {
+                    insertPosition = 2;
+                }
+
+                table[(int)order.City, insertPosition]++;
+            }
+
+            var nOfRows = table.GetLength(0);
+            var nOfColumns = table.GetLength(1);
+
+            var outputBuilder = new StringBuilder();
+
+            outputBuilder.Append("Napok\t1..10\t11..20\t21..30\n");
+            for (int row = 0; row < nOfRows; row++)
+            {
+                outputBuilder.Append($"{(City)row}\t{table[row, 0]}\t{table[row, 1]}\t{table[row, 2]}\n");
+            }
+
+            Console.WriteLine(outputBuilder.ToString());
+            File.WriteAllText(PATH_TO_OUTPUT, outputBuilder.ToString());
         }
     }
 }
