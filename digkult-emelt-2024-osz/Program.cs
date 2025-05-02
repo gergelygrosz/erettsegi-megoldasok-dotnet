@@ -2,23 +2,25 @@
 
 internal class Program
 {
-    private static void Main(string[] args)
-    {
-        Console.WriteLine("--- 2024. ŐSZ EMELT ÉRETTSÉGI - DIGITÁLIS KULTÚRA - AUTÓK MOZGÁSA ---");
-        var programInstance = new Program();
-        programInstance.Feladat1();
-        programInstance.Feladat2();
-        programInstance.Feladat3();
-        programInstance.Feladat4();
-        programInstance.Feladat5();
-        programInstance.Feladat6();
-        programInstance.Feladat7();
-    }
+    const string PathToInput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2024-osz\jeladas.txt";
+    const string PathToOutput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2024-osz\ido.txt";
 
     readonly List<Signal> fileData = [];
 
-    const string PathToInput = "C:\\Prog\\erettsegi-megoldasok-dotnet\\emelt-2024-osz\\jeladas.txt";
-    const string PathToOutput = "C:\\Prog\\erettsegi-megoldasok-dotnet\\emelt-2024-osz\\ido.txt";
+    static void Main(string[] args)
+    {
+
+        Console.WriteLine("--- 2024. ŐSZ EMELT ÉRETTSÉGI - DIGITÁLIS KULTÚRA - AUTÓK MOZGÁSA ---");
+
+        var program = new Program();
+        program.Feladat1();
+        program.Feladat2();
+        program.Feladat3();
+        program.Feladat4();
+        program.Feladat5();
+        program.Feladat6();
+        program.Feladat7();
+    }
 
     /// <summary>
     /// Olvassa be és tárolja el a további feldolgozáshoz a <c>jeladas.txt</c> állomány tartalmát!
@@ -110,7 +112,7 @@ internal class Program
     {
         Console.WriteLine("\n5. feladat");
 
-        int maxSpeed = 0;
+        int maxSpeed = fileData[0].Speed;
         foreach (var currentSignal in fileData)
         {
             if (currentSignal.Speed > maxSpeed)
@@ -166,7 +168,6 @@ internal class Program
             lastSignal = currentSignal;
         }
 
-        // Akkor lesz null még mindig a lastSignal, ha egyszer sem találtuk meg az autót, tehát nem közlekedett
         if (lastSignal is null)
         {
             Console.WriteLine("A megadott rendszámmal nem közlekedett a vizsgált napon jármű");
@@ -193,9 +194,9 @@ internal class Program
 
         foreach (var currentPlate in platesList)
         {
-            // The values are reversed because the search searches backwards
-            TimeOnly min = TimeOnly.MaxValue;
-            TimeOnly max = TimeOnly.MinValue;
+
+            TimeOnly first = fileData[0].Time;
+            TimeOnly last = fileData[0].Time;
 
             foreach (var currentSignal in fileData)
             {
@@ -204,20 +205,18 @@ internal class Program
                     continue;
                 }
 
-                // If current time is before current min
-                if (currentSignal.Time.CompareTo(min) < 0)
+                if (currentSignal.Time < first)
                 {
-                    min = currentSignal.Time;
+                    first = currentSignal.Time;
                 }
 
-                // If current time is after current max
-                if (currentSignal.Time.CompareTo(max) > 0)
+                if (currentSignal.Time > last)
                 {
-                    max = currentSignal.Time;
+                    last = currentSignal.Time;
                 }
             }
 
-            x.Add(Tuple.Create(currentPlate, min, max));
+            x.Add(Tuple.Create(currentPlate, first, last));
         }
 
         var sb = new StringBuilder();
@@ -236,7 +235,6 @@ internal class Program
         }
 
         File.WriteAllText(PathToOutput, sb.ToString());
-
         Console.WriteLine("Sikeresen kiírva");
     }
 }

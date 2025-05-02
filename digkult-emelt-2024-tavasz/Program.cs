@@ -2,10 +2,16 @@
 
 internal class Program
 {
+    const string PathToInput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2024-tavasz\bedat.txt";
+    const string PathToOutput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2024-tavasz\kesok.txt";
+
+    readonly List<Signal> data = [];
+    int eatCounter = 0;
 
     static void Main(string[] args)
     {
         Console.WriteLine("--- 2024. TAVASZ EMELT ÉRETTSÉGI - DIGITÁLIS KULTÚRA - BELÉPTETŐ RENDSZER ---");
+
         var program = new Program();
         program.Feladat1();
         program.Feladat2();
@@ -15,12 +21,6 @@ internal class Program
         program.Feladat6();
         program.Feladat7();
     }
-
-    readonly List<Signal> data = [];
-    int eatCounter = 0;
-
-    const string PathToInput = "C:\\Prog\\erettsegi-megoldasok-dotnet\\emelt-2024-tavasz\\bedat.txt";
-    const string PathToOutput = "C:\\Prog\\erettsegi-megoldasok-dotnet\\emelt-2024-tavasz\\kesok.txt";
 
     /// <summary>
     /// Olvassa be a <c>bedat.txt</c> állomány tartalmát, tárolja el az abban szereplő adatokat, és annak felhasználásával oldja meg a következő feladatokat! Feltételezheti, hogy az állomány legfeljebb 2000 adatsort tartalmaz.
