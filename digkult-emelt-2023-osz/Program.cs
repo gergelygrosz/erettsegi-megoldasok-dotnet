@@ -2,17 +2,17 @@
 
 internal class Program
 {
-    const string PathToInput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2023-osz\rendel.txt";
-    const string PathToOutput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2023-osz\kampany.txt";
+    private const string PathToInput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2023-osz\rendel.txt";
+    private const string PathToOutput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2023-osz\kampany.txt";
 
-    readonly List<Order> data = [];
+    private readonly List<Order> data = [];
 
-    static void Main(string[] args)
+    private static void Main(string[] args)
     {
 
         Console.WriteLine("--- 2023. ŐSZ - DIGITÁLIS KULTÚRA EMELT - REKLÁM ---");
 
-        var program = new Program();
+        Program program = new();
         program.Feladat1();
         program.Feladat2();
         program.Feladat3();
@@ -32,9 +32,9 @@ internal class Program
         Console.WriteLine("\n1. feladat");
 
         string[] lines = File.ReadAllLines(PathToInput);
-        foreach (var line in lines)
+        foreach (string line in lines)
         {
-            var lineSplit = line.Split(' ');
+            string[] lineSplit = line.Split(' ');
             data.Add(new Order(
                 int.Parse(lineSplit[0]),
                 Enum.Parse<City>(lineSplit[1]),
@@ -62,14 +62,14 @@ internal class Program
         Console.WriteLine("\n3. feladat");
 
         Console.Write("Adja meg az egyik nap számát: ");
-        var rawInput = Console.ReadLine();
+        string? rawInput = Console.ReadLine();
         if (!int.TryParse(rawInput, out int inputDay) || inputDay < 0 || inputDay > 30) // ne engedjük meg, hogy nem létező napra kérdezzenek rá!
         {
             Console.WriteLine("Helytelen napot adott meg.");
             return;
         }
 
-        var count = data.Count(x => x.Day == inputDay);
+        int count = data.Count(x => x.Day == inputDay);
         Console.WriteLine($"A megadott napon {count} rendelés történt.");
     }
 
@@ -82,7 +82,7 @@ internal class Program
 
         // mert a bool alapértéke false
         bool[] wereThereOrders = new bool[30];
-        foreach (var order in data)
+        foreach (Order order in data)
         {
             if (order.City == City.NR)
             {
@@ -100,8 +100,8 @@ internal class Program
     {
         Console.WriteLine("\n5. feladat");
 
-        var maxAmount = data.Max(order => order.Amount);
-        var firstDay = data.First(order => order.Amount == maxAmount).Day;
+        int maxAmount = data.Max(order => order.Amount);
+        int firstDay = data.First(order => order.Amount == maxAmount).Day;
         Console.WriteLine($"A legnagyobb rendelt mennyiség {maxAmount}, az első ilyen mértékű rendelés napja {firstDay}.");
     }
 
@@ -139,10 +139,10 @@ internal class Program
     {
         Console.WriteLine("\n8. feladat");
 
-        var table = new int[3, 3];
-        foreach (var order in data)
+        int[,] table = new int[3, 3];
+        foreach (Order order in data)
         {
-            var insertPosition = 0;
+            int insertPosition = 0;
             if (order.Day >= 1 && order.Day <= 10)
             {
                 insertPosition = 0;
@@ -159,7 +159,7 @@ internal class Program
             table[(int)order.City, insertPosition]++;
         }
 
-        var outputBuilder = new StringBuilder();
+        StringBuilder outputBuilder = new();
         outputBuilder.Append("Napok\t1..10\t11..20\t21..30\n");
         for (int row = 0; row < table.GetLength(0); row++)
         {

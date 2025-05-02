@@ -1,21 +1,22 @@
-class Signal(string studentId, TimeOnly time, SignalType type)
+class Signal(string studentId, TimeOnly time, SignalType signalType)
 {
     public string StudentId { get; } = studentId;
     public TimeOnly Time { get; } = time;
-    public SignalType Type { get; } = type;
+    public SignalType SignalType { get; } = signalType;
 
     public override string ToString()
     {
-        return $"Signal {{ {StudentId}, {Time}, {Type} }}";
+        return $"Signal {{ {StudentId}, {Time}, {SignalType} }}";
     }
 
     public string Export()
     {
-        return $"{StudentId}\t{Time}\t{Type}";
+        return $"{StudentId}\t{Time}\t{SignalType}";
     }
+
 }
 
-enum SignalType
+public enum SignalType
 {
     Enter = 1,
     Exit = 2,

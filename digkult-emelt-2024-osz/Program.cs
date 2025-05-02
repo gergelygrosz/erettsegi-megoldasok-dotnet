@@ -2,17 +2,17 @@
 
 internal class Program
 {
-    const string PathToInput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2024-osz\jeladas.txt";
-    const string PathToOutput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2024-osz\ido.txt";
+    private const string PathToInput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2024-osz\jeladas.txt";
+    private const string PathToOutput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2024-osz\ido.txt";
 
-    readonly List<Signal> fileData = [];
+    private readonly List<Signal> data = [];
 
-    static void Main(string[] args)
+    private static void Main(string[] args)
     {
 
         Console.WriteLine("--- 2024. ŐSZ EMELT ÉRETTSÉGI - DIGITÁLIS KULTÚRA - AUTÓK MOZGÁSA ---");
 
-        var program = new Program();
+        Program program = new();
         program.Feladat1();
         program.Feladat2();
         program.Feladat3();
@@ -29,12 +29,12 @@ internal class Program
     {
         Console.WriteLine("\n1. feladat");
 
-        var lines = File.ReadAllLines(PathToInput).ToList();
+        string[] lines = File.ReadAllLines(PathToInput);
 
-        foreach (var currentLine in lines)
+        foreach (string currentLine in lines)
         {
-            var lineSplit = currentLine.Split("\t");
-            fileData.Add(new Signal(
+            string[] lineSplit = currentLine.Split("\t");
+            data.Add(new Signal(
                 lineSplit[0],
                 new TimeOnly(int.Parse(lineSplit[1]), int.Parse(lineSplit[2])),
                 int.Parse(lineSplit[3])
@@ -51,9 +51,9 @@ internal class Program
     {
         Console.WriteLine("\n2. feladat");
 
-        var lastSignal = fileData.Last();
+        Signal lastSignal = data.Last();
 
-        Console.WriteLine($"Az utolsó jeladás időpontja {lastSignal.Time}, a jármű rendszáma {lastSignal.Plate}");
+        Console.WriteLine($"Az utolsó jeladás időpontja {lastSignal.Time}, a jármű rendszáma {lastSignal.Car}");
     }
 
     /// <summary>
@@ -63,19 +63,18 @@ internal class Program
     {
         Console.WriteLine("\n3. feladat");
 
-        var firstPlate = fileData.First().Plate;
-        List<TimeOnly> times = [];
-
-        foreach (var currentSignal in fileData)
+        string firstCar = data.First().Car;
+        List<TimeOnly> signalTimes = [];
+        foreach (Signal signal in data)
         {
-            if (currentSignal.Plate == firstPlate)
+            if (signal.Car == firstCar)
             {
-                times.Add(currentSignal.Time);
+                signalTimes.Add(signal.Time);
             }
         }
 
-        Console.WriteLine($"Az első jármű: {firstPlate}");
-        Console.WriteLine($"Jeladásainak időpontjai: {string.Join(" ", times)}");
+        Console.WriteLine($"Az első jármű: {firstCar}");
+        Console.WriteLine($"Jeladásainak időpontjai: {string.Join(" ", signalTimes)}");
     }
 
     /// <summary>
@@ -86,17 +85,17 @@ internal class Program
         Console.WriteLine("\n4. feladat");
 
         Console.Write("Kérem, adjon meg egy időpontot: (óó:pp) ");
-        var input = Console.ReadLine();
+        string? input = Console.ReadLine();
         if (!TimeOnly.TryParse(input, out TimeOnly inputTime))
         {
             Console.WriteLine("Helytelen időpontot adott meg");
             return;
         }
 
-        var counter = 0;
-        foreach (var currentSignal in fileData)
+        int counter = 0;
+        foreach (Signal signal in data)
         {
-            if (currentSignal.Time.Equals(inputTime))
+            if (signal.Time.Equals(inputTime))
             {
                 counter++;
             }
@@ -112,26 +111,26 @@ internal class Program
     {
         Console.WriteLine("\n5. feladat");
 
-        int maxSpeed = fileData[0].Speed;
-        foreach (var currentSignal in fileData)
+        int maxSpeed = data[0].Speed;
+        foreach (Signal signal in data)
         {
-            if (currentSignal.Speed > maxSpeed)
+            if (signal.Speed > maxSpeed)
             {
-                maxSpeed = currentSignal.Speed;
+                maxSpeed = signal.Speed;
             }
         }
 
-        HashSet<string> fastPlates = [];
-        foreach (var currentSignal in fileData)
+        HashSet<string> speedingCars = [];
+        foreach (Signal signal in data)
         {
-            if (currentSignal.Speed == maxSpeed)
+            if (signal.Speed == maxSpeed)
             {
-                fastPlates.Add(currentSignal.Plate);
+                speedingCars.Add(signal.Car);
             }
         }
 
-        Console.WriteLine($"A legnagyobb sebesség: {maxSpeed} km/h");
-        Console.WriteLine($"A járművek: {string.Join(' ', fastPlates)}");
+        Console.WriteLine($"A legnagyobb sebesség: {maxSpeed} km/h.");
+        Console.WriteLine($"A járművek: {string.Join(", ", speedingCars)}.");
     }
 
     /// <summary>
@@ -142,35 +141,41 @@ internal class Program
         Console.WriteLine("\n6. feladat");
 
         Console.Write("Adja meg egy jármű rendszámát: ");
-        var inputPlate = Console.ReadLine().Trim().ToUpper();
+        string rawInput = Console.ReadLine().Trim().ToUpper();
+        try
+        {
+            string inputCar = rawInput.Trim().ToUpper();
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine(e.StackTrace);
+        }
 
         double totalDistanceTravelled = 0;
         Signal? lastSignal = null;
 
-        foreach (var currentSignal in fileData)
+        foreach (Signal signal in data)
         {
-            if (currentSignal.Plate != inputPlate)
+            if (signal.Car != rawInput)
             {
                 continue;
             }
 
-            if (lastSignal is null)
-            {
-                lastSignal = currentSignal;
-            }
+            // if lastSignal is null: lastSignal = signal
+            lastSignal ??= signal;
 
-            var elapsedTime = (currentSignal.Time - lastSignal.Value.Time).TotalHours;
-            var lastDistanceTravelled = elapsedTime * lastSignal.Value.Speed;
+            double elapsedTime = (signal.Time - lastSignal.Value.Time).TotalHours;
+            double lastDistanceTravelled = elapsedTime * lastSignal.Value.Speed;
             totalDistanceTravelled += lastDistanceTravelled;
 
-            Console.WriteLine($"{currentSignal.Time} {totalDistanceTravelled:0.0} km");
+            Console.WriteLine($"{signal.Time} {totalDistanceTravelled:0.0} km");
 
-            lastSignal = currentSignal;
+            lastSignal = signal;
         }
 
         if (lastSignal is null)
         {
-            Console.WriteLine("A megadott rendszámmal nem közlekedett a vizsgált napon jármű");
+            Console.WriteLine("A megadott rendszámmal nem közlekedett a vizsgált napon jármű.");
         }
     }
 
@@ -181,60 +186,60 @@ internal class Program
     {
         Console.WriteLine("\n7. feladat");
 
-        HashSet<string> plates = [];
-        foreach (var currentSignal in fileData)
+        HashSet<string> cars = [];
+        foreach (Signal signal in data)
         {
-            plates.Add(currentSignal.Plate);
+            cars.Add(signal.Car);
         }
 
-        var platesList = plates.ToList();
-        platesList.Sort();
+        List<string> carsAsList = [.. cars];
+        carsAsList.Sort();
 
         List<Tuple<string, TimeOnly, TimeOnly>> x = [];
 
-        foreach (var currentPlate in platesList)
+        foreach (string car in carsAsList)
         {
 
-            TimeOnly first = fileData[0].Time;
-            TimeOnly last = fileData[0].Time;
+            TimeOnly first = data[0].Time;
+            TimeOnly last = data[0].Time;
 
-            foreach (var currentSignal in fileData)
+            foreach (Signal signal in data)
             {
-                if (!string.Equals(currentSignal.Plate, currentPlate))
+                if (!string.Equals(signal.Car, car))
                 {
                     continue;
                 }
 
-                if (currentSignal.Time < first)
+                if (signal.Time < first)
                 {
-                    first = currentSignal.Time;
+                    first = signal.Time;
                 }
 
-                if (currentSignal.Time > last)
+                if (signal.Time > last)
                 {
-                    last = currentSignal.Time;
+                    last = signal.Time;
                 }
             }
 
-            x.Add(Tuple.Create(currentPlate, first, last));
+            x.Add(Tuple.Create(car, first, last));
         }
 
-        var sb = new StringBuilder();
-        foreach (var currentTuple in x)
+        StringBuilder sb = new StringBuilder();
+        foreach (Tuple<string, TimeOnly, TimeOnly> tuple in x)
         {
-            sb.Append(currentTuple.Item1);
+            sb.Append(tuple.Item1);
             sb.Append(' ');
-            sb.Append(currentTuple.Item2.Hour);
+            sb.Append(tuple.Item2.Hour);
             sb.Append(' ');
-            sb.Append(currentTuple.Item2.Minute);
+            sb.Append(tuple.Item2.Minute);
             sb.Append(' ');
-            sb.Append(currentTuple.Item3.Hour);
+            sb.Append(tuple.Item3.Hour);
             sb.Append(' ');
-            sb.Append(currentTuple.Item3.Minute);
+            sb.Append(tuple.Item3.Minute);
             sb.Append('\n');
         }
 
         File.WriteAllText(PathToOutput, sb.ToString());
-        Console.WriteLine("Sikeresen kiírva");
+        Console.WriteLine("Sikeresen kiírva.");
     }
 }

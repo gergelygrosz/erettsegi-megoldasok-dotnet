@@ -2,17 +2,17 @@
 
 internal class Program
 {
-    const string PathToInput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2024-tavasz\bedat.txt";
-    const string PathToOutput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2024-tavasz\kesok.txt";
+    private const string PathToInput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2024-tavasz\bedat.txt";
+    private const string PathToOutput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2024-tavasz\kesok.txt";
 
-    readonly List<Signal> data = [];
-    int eatCounter = 0;
+    private readonly List<Signal> data = [];
+    private int eatCounter = 0;
 
     static void Main(string[] args)
     {
         Console.WriteLine("--- 2024. TAVASZ EMELT ÉRETTSÉGI - DIGITÁLIS KULTÚRA - BELÉPTETŐ RENDSZER ---");
 
-        var program = new Program();
+        Program program = new Program();
         program.Feladat1();
         program.Feladat2();
         program.Feladat3();
@@ -29,15 +29,15 @@ internal class Program
     {
         Console.WriteLine("\n1. feladat");
 
-        var lines = File.ReadAllLines(PathToInput);
-        foreach (var line in lines)
+        string[] lines = File.ReadAllLines(PathToInput);
+        foreach (string line in lines)
         {
-            var cLineSplit = line.Split(' ');
+            string[] lineSplit = line.Split(' ');
 
             data.Add(new Signal(
-                cLineSplit[0],
-                TimeOnly.Parse(cLineSplit[1]),
-                (SignalType)int.Parse(cLineSplit[2])
+                lineSplit[0],
+                TimeOnly.Parse(lineSplit[1]),
+                (SignalType)int.Parse(lineSplit[2])
             ));
         }
 
@@ -51,18 +51,17 @@ internal class Program
     {
         Console.WriteLine("\n2. feladat");
 
-        // Reverse-order search
         TimeOnly firstEntryTime = TimeOnly.MaxValue;
         TimeOnly lastExitTime = TimeOnly.MinValue;
-        foreach (var signal in data)
+        foreach (Signal signal in data)
         {
-            if (signal.Type == SignalType.Enter &&
+            if (signal.SignalType == SignalType.Enter &&
                 signal.Time < firstEntryTime)
             {
                 firstEntryTime = signal.Time;
             }
 
-            if (signal.Type == SignalType.Exit &&
+            if (signal.SignalType == SignalType.Exit &&
                 signal.Time > lastExitTime)
             {
                 lastExitTime = signal.Time;
@@ -83,7 +82,7 @@ internal class Program
         var sb = new StringBuilder();
         foreach (var signal in data)
         {
-            if (signal.Type == SignalType.Enter &&
+            if (signal.SignalType == SignalType.Enter &&
                 signal.Time > new TimeOnly(7, 50) &&
                 signal.Time <= new TimeOnly(8, 15))
             {
@@ -104,7 +103,7 @@ internal class Program
 
         foreach (var signal in data)
         {
-            if (signal.Type == SignalType.Eat)
+            if (signal.SignalType == SignalType.Eat)
             {
                 eatCounter++;
             }
@@ -123,7 +122,7 @@ internal class Program
         HashSet<string> readers = [];
         foreach (var signal in data)
         {
-            if (signal.Type == SignalType.BorrowBook)
+            if (signal.SignalType == SignalType.BorrowBook)
             {
                 readers.Add(signal.StudentId);
             }
@@ -159,7 +158,7 @@ internal class Program
         foreach (var signal in data)
         {
             // fill up condition1
-            if (signal.Type == SignalType.Enter &&
+            if (signal.SignalType == SignalType.Enter &&
                 signal.Time >= new TimeOnly(10, 50) &&
                 signal.Time < new TimeOnly(11, 0))
             {
@@ -167,14 +166,14 @@ internal class Program
             }
 
             // fill up condition2
-            if (signal.Type == SignalType.Enter &&
+            if (signal.SignalType == SignalType.Enter &&
                 signal.Time < new TimeOnly(10, 45))
             {
                 condition2.Add(signal.StudentId);
             }
 
             // fill up condition3
-            if (signal.Type == SignalType.Exit &&
+            if (signal.SignalType == SignalType.Exit &&
                 signal.Time >= new TimeOnly(10, 45) &&
                 signal.Time < new TimeOnly(11, 0))
             {
@@ -204,14 +203,14 @@ internal class Program
         foreach (var signal in data)
         {
             if (Equals(signal.StudentId, input) &&
-                signal.Type == SignalType.Enter &&
+                signal.SignalType == SignalType.Enter &&
                 signal.Time < firstEntryTime)
             {
                 firstEntryTime = signal.Time;
             }
 
             if (Equals(signal.StudentId, input) &&
-                signal.Type == SignalType.Exit &&
+                signal.SignalType == SignalType.Exit &&
                 signal.Time > lastExitTime)
             {
                 lastExitTime = signal.Time;
