@@ -115,7 +115,6 @@ internal class Program
             Console.WriteLine("\n8. feladat");
 
             var table = new int[3, 3];
-
             foreach (var order in data)
             {
                 var insertPosition = 0;
@@ -135,13 +134,9 @@ internal class Program
                 table[(int)order.City, insertPosition]++;
             }
 
-            var nOfRows = table.GetLength(0);
-            var nOfColumns = table.GetLength(1);
-
             var outputBuilder = new StringBuilder();
-
             outputBuilder.Append("Napok\t1..10\t11..20\t21..30\n");
-            for (int row = 0; row < nOfRows; row++)
+            for (int row = 0; row < table.GetLength(0); row++)
             {
                 outputBuilder.Append($"{(City)row}\t{table[row, 0]}\t{table[row, 1]}\t{table[row, 2]}\n");
             }
