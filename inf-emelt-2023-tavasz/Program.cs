@@ -119,4 +119,18 @@
         Console.WriteLine($"A legsötétebb képpontok színei: ");
         Console.WriteLine(string.Join('\n', darkColors.Select(c => c.Display())));
     }
+
+    /// <summary>
+    /// A képen a kék ég látható közepén egy felhővel. Az ég és a felhő színe között jelentős különbség van, így az ég-felhő határvonal programmal is felismerhető. Ennek megtalálásához készítsen függvényt <c>hatar</c> néven, amely megadja, hogy egy adott sorban van-e olyan hely a képen, ahol az egymás melletti képpontok kék színösszetevőinek eltérése meghalad egy adott értéket! A függvény kapja meg paraméterként a sor számát, illetve az eltérés értékét, melyek egészek! A függvény visszatérési értéke egy logikai érték legyen, amely megadja, hogy az adott sorban volt-e az eltérést meghaladó különbség az egymás melletti képpontok kék színében!
+    /// </summary>
+    bool Hatar(int row, int difference)
+    {
+        int lastCheckedBlueValue = image[0, 0].Blue;
+        foreach (RgbColor color in image)
+        {
+            if (int.Abs(color.Blue - lastCheckedBlueValue) > difference) { return true; }
+        }
+
+        return false;
+    }
 }
