@@ -13,6 +13,7 @@
         program.Feladat1();
         program.Feladat2();
         program.Feladat3();
+        program.Feladat4();
     }
 
     /// <summary>
@@ -89,12 +90,33 @@
         int count = 0;
         foreach (RgbColor color in image)
         {
-            if (color.Bright)
-            {
-                count++;
-            }
+            if (color.Bright) { count++; }
         }
 
         Console.WriteLine($"A világos képpontok száma: {count}");
+    }
+
+    /// <summary>
+    /// A kép legsötétebb pontjainak azokat a pontokat tekintjük, amelyek RGB-értékeinek összege a legkisebb. Adja meg, hogy mennyi a legkisebb összeg, illetve keresse meg az ilyen RGB összegű pixeleket, és írja ki mindegyik színét RGB(r,g,b) formában a mintának megfelelően!
+    /// </summary>
+    void Feladat4()
+    {
+        Console.WriteLine("\n4. feladat");
+
+        int min = image[0, 0].TotalValue;
+        foreach (RgbColor color in image)
+        {
+            if (color.TotalValue < min) { min = color.TotalValue; }
+        }
+
+        List<RgbColor> darkColors = [];
+        foreach (RgbColor color in image)
+        {
+            if (color.TotalValue == min) { darkColors.Add(color); }
+        }
+
+        Console.WriteLine($"A legsötétebb képpont RGB-értékeinek összege: {min}");
+        Console.WriteLine($"A legsötétebb képpontok színei: ");
+        Console.WriteLine(string.Join('\n', darkColors.Select(c => c.Display())));
     }
 }
