@@ -2,7 +2,13 @@
 {
     private static readonly string PathToInput = Environment.GetEnvironmentVariable("PROJECTS") + @"\dotnet\erettsegi-megoldasok-dotnet\inf-emelt-2023-tavasz\kep.txt";
 
-    private readonly RgbColor[,] image = new RgbColor[360, 640];
+    const int NumberOfRows = 360;
+    const int NumberOfColumns = 640;
+
+    /// <summary>
+    /// !TODO: shift by one for accurate access and representation of row and column numbers
+    /// </summary>
+    private readonly RgbColor[,] image = new RgbColor[NumberOfRows, NumberOfColumns];
 
     private static void Main(string[] args)
     {
@@ -14,6 +20,7 @@
         program.Feladat2();
         program.Feladat3();
         program.Feladat4();
+        program.Feladat6();
     }
 
     /// <summary>
@@ -125,12 +132,48 @@
     /// </summary>
     bool Hatar(int row, int difference)
     {
-        int lastCheckedBlueValue = image[0, 0].Blue;
-        foreach (RgbColor color in image)
+        int lastCheckedBlueValue = image[row, 0].Blue;
+        for (int column = 0; column < NumberOfColumns; column++)
         {
-            if (int.Abs(color.Blue - lastCheckedBlueValue) > difference) { return true; }
+            if (int.Abs(image[row, column].Blue - lastCheckedBlueValue) > difference)
+            {
+                return true;
+            }
+
+            lastCheckedBlueValue = image[row, column].Blue;
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Keresse meg a képen a felhő első és utolsó sorát az előzőleg elkészített függvény segítségével úgy, hogy eltérésként 10-et ad meg a függvénynek bemenetként! Adja meg az első és az utolsó olyan sor sorszámát, ahol az eltérés a soron belül valahol 10-nél nagyobb!
+    /// </summary>
+    void Feladat6()
+    {
+        Console.WriteLine("\n6. feladat");
+
+        int firstRow = -1;
+        for (int row = 0; row < NumberOfRows - 1; row++)
+        {
+            if (Hatar(row, 10))
+            {
+                firstRow = row;
+                break;
+            }
+        }
+
+        int lastRow = -1;
+        for (int row = NumberOfRows - 1; row > 0; row--)
+        {
+            if (Hatar(row, 10))
+            {
+                lastRow = row;
+                break;
+            }
+        }
+
+        Console.WriteLine($"A felhő legfelső sora: {firstRow}");
+        Console.WriteLine($"A felhő legalsó sora: {lastRow}");
     }
 }
