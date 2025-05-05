@@ -6,5 +6,5 @@ internal readonly struct RgbColor(byte Red, byte Green, byte Blue)
 
     public override string ToString() => $"RgbColor {{ {Red}, {Green}, {Blue} }}";
 
-    public string Export() => $"RGB({Red},{Green},{Blue})";
+    public string Display() => $"RGB({Red},{Green},{Blue})";
 }
