@@ -6,7 +6,7 @@
     const int NumberOfColumns = 640;
 
     /// <summary>
-    /// !TODO: shift by one for accurate access and representation of row and column numbers
+    /// NOT SHIFTED FOR REASONS
     /// </summary>
     private readonly RgbColor[,] image = new RgbColor[NumberOfRows, NumberOfColumns];
 
@@ -84,7 +84,7 @@
             return;
         }
 
-        Console.WriteLine($"A képpont színe: {image[x, y].Display()}");
+        Console.WriteLine($"A képpont színe: {image[x - 1, y - 1].Display()}");
     }
 
     /// <summary>
@@ -129,18 +129,20 @@
 
     /// <summary>
     /// A képen a kék ég látható közepén egy felhővel. Az ég és a felhő színe között jelentős különbség van, így az ég-felhő határvonal programmal is felismerhető. Ennek megtalálásához készítsen függvényt <c>hatar</c> néven, amely megadja, hogy egy adott sorban van-e olyan hely a képen, ahol az egymás melletti képpontok kék színösszetevőinek eltérése meghalad egy adott értéket! A függvény kapja meg paraméterként a sor számát, illetve az eltérés értékét, melyek egészek! A függvény visszatérési értéke egy logikai érték legyen, amely megadja, hogy az adott sorban volt-e az eltérést meghaladó különbség az egymás melletti képpontok kék színében!
+    /// 
+    /// A függvény a kép valódi sorát veszi be paraméterként, nem az indexét!!!
     /// </summary>
     bool Hatar(int row, int difference)
     {
-        int lastCheckedBlueValue = image[row, 0].Blue;
+        int lastCheckedBlueValue = image[row - 1, 0].Blue;
         for (int column = 0; column < NumberOfColumns; column++)
         {
-            if (int.Abs(image[row, column].Blue - lastCheckedBlueValue) > difference)
+            if (int.Abs(image[row - 1, column].Blue - lastCheckedBlueValue) > difference)
             {
                 return true;
             }
 
-            lastCheckedBlueValue = image[row, column].Blue;
+            lastCheckedBlueValue = image[row - 1, column].Blue;
         }
 
         return false;
@@ -153,8 +155,9 @@
     {
         Console.WriteLine("\n6. feladat");
 
-        int firstRow = -1;
-        for (int row = 0; row < NumberOfRows - 1; row++)
+        int firstRow = 0;
+        // Itt is a valódi sorszám alapján csináljuk a ciklust.
+        for (int row = 1; row <= NumberOfRows; row++)
         {
             if (Hatar(row, 10))
             {
@@ -163,8 +166,9 @@
             }
         }
 
-        int lastRow = -1;
-        for (int row = NumberOfRows - 1; row > 0; row--)
+        int lastRow = 0;
+        // Itt is a valódi sorszám alapján csináljuk a ciklust.
+        for (int row = NumberOfRows; row >= 1; row--)
         {
             if (Hatar(row, 10))
             {
