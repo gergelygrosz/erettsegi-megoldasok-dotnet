@@ -2,8 +2,8 @@
 
 internal class Program
 {
-    private static readonly string PathToInput = Environment.GetEnvironmentVariable("PROJECTS") + @"\dotnet\erettsegi-megoldasok-dotnet\digkult-emelt-2024-osz\jeladas.txt";
-    private static readonly string PathToOutput = Environment.GetEnvironmentVariable("PROJECTS") + @"\dotnet\erettsegi-megoldasok-dotnet\digkult-emelt-2024-osz\ido.txt";
+    private static readonly string PathToInput = Environment.GetEnvironmentVariable("PROJECTS") + @"\erettsegi-megoldasok-dotnet\digkult-emelt-2024-osz\jeladas.txt";
+    private static readonly string PathToOutput = Environment.GetEnvironmentVariable("PROJECTS") + @"\erettsegi-megoldasok-dotnet\digkult-emelt-2024-osz\ido.txt";
 
     private readonly List<Signal> data = [];
 

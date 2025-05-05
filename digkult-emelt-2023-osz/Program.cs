@@ -2,8 +2,8 @@
 
 internal class Program
 {
-    private static readonly string PathToInput = Environment.GetEnvironmentVariable("PROJECTS") + @"\dotnet\erettsegi-megoldasok-dotnet\digkult-emelt-2023-osz\rendel.txt";
-    private static readonly string PathToOutput = Environment.GetEnvironmentVariable("PROJECTS") + @"\dotnet\erettsegi-megoldasok-dotnet\digkult-emelt-2023-osz\kampany.txt";
+    private static readonly string PathToInput = Environment.GetEnvironmentVariable("PROJECTS") + @"\erettsegi-megoldasok-dotnet\digkult-emelt-2023-osz\rendel.txt";
+    private static readonly string PathToOutput = Environment.GetEnvironmentVariable("PROJECTS") + @"\erettsegi-megoldasok-dotnet\digkult-emelt-2023-osz\kampany.txt";
 
     private readonly List<Order> data = [];
 
