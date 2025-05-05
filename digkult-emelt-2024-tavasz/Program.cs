@@ -2,8 +2,8 @@
 
 internal class Program
 {
-    private const string PathToInput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2024-tavasz\bedat.txt";
-    private const string PathToOutput = @"C:\Prog\erettsegi-megoldasok-dotnet\digkult-emelt-2024-tavasz\kesok.txt";
+    private static readonly string PathToInput = Environment.GetEnvironmentVariable("PROJECTS") + @"\dotnet\erettsegi-megoldasok-dotnet\digkult-emelt-2024-tavasz\bedat.txt";
+    private static readonly string PathToOutput = Environment.GetEnvironmentVariable("PROJECTS") + @"\dotnet\erettsegi-megoldasok-dotnet\digkult-emelt-2024-tavasz\kesok.txt";
 
     private readonly List<Signal> data = [];
     private int eatCounter = 0;
