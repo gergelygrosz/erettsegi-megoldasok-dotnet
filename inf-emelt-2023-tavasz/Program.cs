@@ -12,6 +12,7 @@
 
         program.Feladat1();
         program.Feladat2();
+        program.Feladat3();
     }
 
     /// <summary>
@@ -41,12 +42,12 @@
                     image[x, y] = new RgbColor(Red: currentColor[0], Green: currentColor[1], Blue: currentColor[2]);
 
                     colorIdx = 0;
-                    y += 1;
+                    y++;
                     Array.Clear(currentColor);
                 }
             }
 
-            x += 1;
+            x++;
         }
 
         Console.WriteLine("Sikeresen beolvasva.");
@@ -59,16 +60,41 @@
     {
         Console.WriteLine("\n2. feladat");
 
-        Console.WriteLine("Adja meg egy pont koordinátáit!");
+        Console.WriteLine("Adja meg egy képpont koordinátáit!");
 
         Console.Write("Sor: ");
-        string? rowString = Console.ReadLine();
-        int x = int.Parse(rowString);
+        if (!int.TryParse(Console.ReadLine(), out int x))
+        {
+            Console.WriteLine("Hibás számot adott meg!");
+            return;
+        }
 
         Console.Write("Oszlop: ");
-        string? columnString = Console.ReadLine();
-        int y = int.Parse(columnString);
+        if (!int.TryParse(Console.ReadLine(), out int y))
+        {
+            Console.WriteLine("Hibás számot adott meg!");
+            return;
+        }
 
         Console.WriteLine($"A képpont színe: {image[x, y].Display()}");
+    }
+
+    /// <summary>
+    /// Világosnak tekintjük az olyan képpontot, amely RGB-értékeinek összege 600-nál nagyobb. Számolja meg és írja ki, hogy a teljes képen hány világos képpont van!
+    /// </summary>
+    void Feladat3()
+    {
+        Console.WriteLine("\n3. feladat");
+
+        int count = 0;
+        foreach (RgbColor color in image)
+        {
+            if (color.Bright)
+            {
+                count++;
+            }
+        }
+
+        Console.WriteLine($"A világos képpontok száma: {count}");
     }
 }
