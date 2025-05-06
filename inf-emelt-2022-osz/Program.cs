@@ -40,7 +40,26 @@
         Console.WriteLine("Sikeresen beolvasva.");
     }
 
-    void Feladat2() { }
+    /// <summary>
+    /// Kérje be a felhasználótól egy jel sorszámát (a sorszámozás 1-től indul), és írja a képernyőre az adott jeladáshoz tartozó <c>x</c> és <c>y</c> koordinátát!
+    /// </summary>
+    void Feladat2()
+    {
+        Console.WriteLine("\n2. feladat");
+
+        Console.Write("Adja meg egy jel sorszámát: ");
+        string rawInput = Console.ReadLine();
+        bool result = int.TryParse(rawInput, out int row);
+        if (!result || row <= 0)
+        {
+            Console.WriteLine("Hibás számot adott meg!");
+            return;
+        }
+
+        Signal queriedSignal = signals[row - 1];
+        Console.WriteLine($"x={queriedSignal.X}, y={queriedSignal.Y}");
+    }
+
     void Eltelt() { }
     void Feladat4() { }
     void Feladat5() { }
