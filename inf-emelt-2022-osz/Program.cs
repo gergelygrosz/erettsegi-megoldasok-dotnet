@@ -3,6 +3,7 @@
 internal class Program
 {
     private static readonly string PathToInput = Environment.GetEnvironmentVariable("PROJECTS") + @"\dotnet\erettsegi-megoldasok-dotnet\inf-emelt-2022-osz\jel.txt";
+    private static readonly string PathToOutput = Environment.GetEnvironmentVariable("PROJECTS") + @"\dotnet\erettsegi-megoldasok-dotnet\inf-emelt-2022-osz\kimaradt.txt";
 
     private readonly List<Signal> signals = [];
 
@@ -127,5 +128,11 @@ internal class Program
         Console.WriteLine($"Elmozdulások összege: {distance:0.000}");
     }
 
-    void Feladat7() { }
+    /// <summary>
+    /// Írja a <c>kimaradt.txt</c> fájlba a kimaradt észlelésekkel kapcsolatos adatokat! A kimeneti fájlban azok a bemeneti állományban rögzített vételi időpontok jelenjenek meg, amelyek előtt közvetlenül egy vagy több észlelés kimaradt! Az időpont mellett – a mintának megfelelően – jelenjen meg, hogy legalább hány jel maradt ki, és az is, hogy miből következtet a hiányra! Ha idő- és koordináta-eltérésből is adódik jelkimaradás, akkor a nagyobb értéket írja ki! Ha az időeltérés és a koordináták eltérése alapján is ugyanannyi jelkimaradásra következtetünk, akkor bármelyiket kiírhatja.
+    /// </summary>
+    void Feladat7()
+    {
+        Console.WriteLine("\n7. feladat");
+    }
 }
