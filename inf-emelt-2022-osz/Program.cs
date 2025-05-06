@@ -107,6 +107,25 @@ internal class Program
         Console.WriteLine($"Jobb felső: x={max.X}, y={max.Y}");
     }
 
-    void Feladat6() { }
+    /// <summary>
+    /// Írja a képernyőre, hogy mennyi volt a jeladó elmozdulásainak összege! Úgy tekintjük, hogy a jeladó két pozíciója közötti elmozdulása a pozíciókat összekötő egyenes mentén történt. Az összeget három tizedes pontossággal jelenítse meg! A kiírásnál a tizedesvessző és tizedespont kiírása is elfogadott. Az <c>i</c>-edik és az <c>i+1</c>-edik pontok távolságát a <c>sqrt((x_(i) - x_(i+1))^2 + (y_(i) - y_(i+1))^2)</c> képlet segítségével határozhatja meg.
+    /// </summary>
+    void Feladat6()
+    {
+        Console.WriteLine("\n6. feladat");
+
+        double distance = 0d;
+
+        for (int i = 0; i < signals.Count - 1; i++)
+        {
+            distance += Math.Sqrt(
+                Math.Pow(signals[i].Position.X - signals[i + 1].Position.X, 2) +
+                Math.Pow(signals[i].Position.Y - signals[i + 1].Position.Y, 2)
+            );
+        }
+
+        Console.WriteLine($"Elmozdulások összege: {distance:0.000}");
+    }
+
     void Feladat7() { }
 }
