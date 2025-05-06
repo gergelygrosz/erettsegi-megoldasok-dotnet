@@ -60,7 +60,14 @@
         Console.WriteLine($"x={queriedSignal.X}, y={queriedSignal.Y}");
     }
 
-    void Eltelt() { }
+    /// <summary>
+    /// Készítsen függvényt <c>eltelt</c> néven, amely megadja, hogy a paraméterként átadott két időpont között hány másodperc telik el! A két időpontot, mint paramétert tetszőleges módon átadhatja. Használhat három-három számértéket, két tömböt vagy listát, de más, a célnak megfelelő típusú változót is. Ezt a függvényt később használja fel legalább egy feladat megoldása során!
+    /// </summary>
+    int Eltelt(TimeOnly time1, TimeOnly time2)
+    {
+        return (time1 - time2).Seconds;
+    }
+
     void Feladat4() { }
     void Feladat5() { }
     void Feladat6() { }
