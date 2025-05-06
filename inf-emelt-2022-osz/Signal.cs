@@ -1,20 +1,19 @@
+using System.Drawing;
+
 internal class Signal
 {
     public TimeOnly Time { get; }
-    public int X { get; }
-    public int Y { get; }
+    public Point Position { get; }
 
-    public Signal(TimeOnly time, int x, int y)
+    public Signal(TimeOnly time, Point position)
     {
         Time = time;
-        X = x;
-        Y = y;
+        Position = position;
     }
 
     public Signal(int hour, int minute, int second, int x, int y)
     {
         Time = new TimeOnly(hour, minute, second);
-        X = x;
-        Y = y;
+        Position = new Point(x, y);
     }
 }

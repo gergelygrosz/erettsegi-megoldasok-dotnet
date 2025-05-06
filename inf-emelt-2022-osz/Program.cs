@@ -1,4 +1,6 @@
-﻿internal class Program
+﻿using System.Drawing;
+
+internal class Program
 {
     private static readonly string PathToInput = Environment.GetEnvironmentVariable("PROJECTS") + @"\dotnet\erettsegi-megoldasok-dotnet\inf-emelt-2022-osz\jel.txt";
 
@@ -57,7 +59,7 @@
         }
 
         Signal queriedSignal = signals[row - 1];
-        Console.WriteLine($"x={queriedSignal.X}, y={queriedSignal.Y}");
+        Console.WriteLine($"x={queriedSignal.Position.X}, y={queriedSignal.Position.Y}");
     }
 
     /// <summary>
@@ -82,7 +84,13 @@
         Console.WriteLine($"Az első és utolsó jelzés között eltelt időtartam: {elapsedTime}");
     }
 
-    void Feladat5() { }
+    /// <summary>
+    /// Határozza meg azt a legkisebb, a koordináta-rendszer tengelyeivel párhuzamos oldalú téglalapot, amelyből nem lépett ki a jeladó! Adja meg a téglalap bal alsó és jobb felső sarkának koordinátáit!
+    /// </summary>
+    void Feladat5()
+    {
+        Console.WriteLine("\n5. feladat");
+    }
     void Feladat6() { }
     void Feladat7() { }
 }
