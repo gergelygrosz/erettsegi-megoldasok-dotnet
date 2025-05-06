@@ -90,7 +90,23 @@ internal class Program
     void Feladat5()
     {
         Console.WriteLine("\n5. feladat");
+
+        // közelítő keresés
+        Point min = new(10000, 10000); // bal alsó lesz
+        Point max = new(-10000, -10000); // jobb felső lesz
+
+        foreach (Signal signal in signals)
+        {
+            if (signal.Position.X < min.X) { min.X = signal.Position.X; }
+            if (signal.Position.Y < min.Y) { min.Y = signal.Position.Y; }
+            if (signal.Position.X > max.X) { max.X = signal.Position.X; }
+            if (signal.Position.Y > max.Y) { max.Y = signal.Position.Y; }
+        }
+
+        Console.WriteLine($"Bal alsó: x={min.X}, y={min.Y}");
+        Console.WriteLine($"Jobb felső: x={max.X}, y={max.Y}");
     }
+
     void Feladat6() { }
     void Feladat7() { }
 }
