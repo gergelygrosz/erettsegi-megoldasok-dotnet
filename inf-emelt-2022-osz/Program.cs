@@ -65,10 +65,23 @@
     /// </summary>
     int Eltelt(TimeOnly time1, TimeOnly time2)
     {
-        return (time1 - time2).Seconds;
+        return (time2 - time1).Seconds;
     }
 
-    void Feladat4() { }
+    /// <summary>
+    /// Adja meg, mennyi idő telt el az első és az utolsó észlelés között! Az időt <c>óra:perc:mperc</c> alakban írja a képernyőre!
+    /// </summary>
+    void Feladat4()
+    {
+        Console.WriteLine("\n4. feladat");
+
+        Signal first = signals.First();
+        Signal last = signals.Last();
+        TimeSpan elapsedTime = last.Time - first.Time;
+
+        Console.WriteLine($"Az első és utolsó jelzés között eltelt időtartam: {elapsedTime}");
+    }
+
     void Feladat5() { }
     void Feladat6() { }
     void Feladat7() { }
